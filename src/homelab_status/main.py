@@ -1,6 +1,6 @@
+def get_status():
+   return "Homelab is alive!"
 def main():
-    print("Homelab is alive!")
-
-
-if __name__ == "__main__":
+   print(get_status())
+if __name__=="__main__":
     main()
