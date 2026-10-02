@@ -3,3 +3,4 @@ Name: homelab-status
 Version: 0.1.0
 Summary: A small status tool for my homelab
 Requires-Python: >=3.14
+Requires-Dist: docker
