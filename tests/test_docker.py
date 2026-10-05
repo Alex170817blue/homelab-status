@@ -1,4 +1,4 @@
-from homelab_status.main import ContainerStatus, get_containers_status
+from homelab_status.docker_adapter import ContainerStatus, get_containers_status
 
 
 class FakeContainer:

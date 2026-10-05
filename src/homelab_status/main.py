@@ -1,24 +1,6 @@
-from dataclasses import dataclass
-
 import docker
 
-
-@dataclass
-class ContainerStatus:
-    name: str
-    status: str
-
-
-def get_containers_status(client):
-    containers = client.containers.list(all=True)
-
-    return [
-        ContainerStatus(
-            name=container.name,
-            status=container.status,
-        )
-        for container in containers
-    ]
+from homelab_status.docker_adapter import get_containers_status
 
 
 def main():
