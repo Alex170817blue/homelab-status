@@ -1,4 +1,9 @@
-from homelab_status.docker_adapter import ContainerStatus, get_containers_status
+from homelab_status.docker_adapter import (
+    ContainerStatus,
+    SystemStatus,
+    get_containers_status,
+    get_system_status,
+)
 
 
 class FakeContainer:
@@ -28,3 +33,19 @@ def test_get_containers_status():
         ContainerStatus("adguardhome", "running"),
         ContainerStatus("old_container", "exited"),
     ]
+
+
+def test_get_system_status():
+    containers = [
+        ContainerStatus("immich_server", "running"),
+        ContainerStatus("adguardhome", "running"),
+        ContainerStatus("old_container", "exited"),
+    ]
+
+    result = get_system_status(containers)
+
+    assert result == SystemStatus(
+        total=3,
+        running=2,
+        stopped=1,
+    )
