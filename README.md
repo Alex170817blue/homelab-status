@@ -30,12 +30,13 @@ The project is intentionally small so that each new feature is an opportunity to
 
 ## Current status
 
-       .
-      ":"
-    ___:____     |"\/"|
-  ,'        `.    \  /
-  |  O        \___/  |
-~^~^~^~^~^~^~^~^~^~^~^~^~
+           .
+          ":"
+        ___:____     |"\/"|
+      ,'        `.    \  /
+      |  O        \___/  |
+    ~^~^~^~^~^~^~^~^~^~^~^~^~
+
 The application currently connects to the local Docker daemon and reports the status of all containers.
 
 Example:
