@@ -4,7 +4,9 @@ from homelab_status.docker_adapter import (
     get_containers_status,
     get_system_status,
 )
-
+import json
+import importlib
+main_module = importlib.import_module("homelab_status.main")
 
 class FakeContainer:
     def __init__(self, name, status):
@@ -49,3 +51,34 @@ def test_get_system_status():
         running=2,
         stopped=1,
     )
+
+def test_main_json_output(monkeypatch, capsys):
+    class FakeClient:
+        pass
+    
+    containers = [
+        ContainerStatus("immich_server", "running"),
+        ContainerStatus("adguardhome", "running"),
+        ContainerStatus("old_container", "exited"),
+    ]
+
+    monkeypatch.setattr(main_module.docker, "from_env", lambda: FakeClient())
+    monkeypatch.setattr(main_module, "get_containers_status", lambda client: containers)
+    monkeypatch.setattr("sys.argv", ["main.py", "--json"]),
+
+    main_module.main()
+
+    output = capsys.readouterr().out
+    result = json.loads(output)
+
+    assert result["system"] == {
+        "total": 3,
+        "running": 2,
+        "stopped": 1,
+    }
+
+    assert result["containers"] == [
+        {"name": "immich_server", "status": "running"},
+        {"name": "adguardhome", "status": "running"},
+        {"name": "old_container", "status": "exited"},
+    ]
