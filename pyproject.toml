@@ -15,3 +15,6 @@ dependencies = [
 dev = [
     "pytest",
 ]
+
+[project.scripts]
+homelab-status= "homelab_status.main:main"
