@@ -18,12 +18,21 @@ def main():
         action="store_true",
         help="Output status as JSON",
     )
+    parser.add_argument(
+        "--only-stopped",
+        action="store_true",
+        help="Only show stopped containers",
+    )
+
     args = parser.parse_args()
 
     client = docker.from_env()
-
     containers = get_containers_status(client)
     system_status = get_system_status(containers)
+    
+   
+    if args.only_stopped:
+        containers = [c for c in containers if c.status != "running"]
 
     if args.json:
         result = {

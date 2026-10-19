@@ -82,3 +82,36 @@ def test_main_json_output(monkeypatch, capsys):
         {"name": "adguardhome", "status": "running"},
         {"name": "old_container", "status": "exited"},
     ]
+
+def test_main_only_stopped(monkeypatch, capsys):
+    class FakeClient:
+        pass
+
+    containers = [
+        ContainerStatus("immich_server", "running"),
+        ContainerStatus("adguardhome", "running"),
+        ContainerStatus("old_container", "exited"),
+    ]
+
+    monkeypatch.setattr(
+        main_module.docker,
+        "from_env",
+        lambda: FakeClient(),
+    )
+    monkeypatch.setattr(
+        main_module,
+        "get_containers_status",
+        lambda client: containers,
+    )
+    monkeypatch.setattr(
+        "sys.argv",
+        ["homelab-status", "--only-stopped"],
+    )
+
+    main_module.main()
+
+    output = capsys.readouterr().out
+
+    assert "old_container: exited" in output
+    assert "immich_server: running" not in output
+    assert "adguardhome: running" not in output
