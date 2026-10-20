@@ -6,6 +6,7 @@ from homelab_status.docker_adapter import (
 )
 import json
 import importlib
+import pytest
 main_module = importlib.import_module("homelab_status.main")
 
 class FakeContainer:
@@ -115,3 +116,21 @@ def test_main_only_stopped(monkeypatch, capsys):
     assert "old_container: exited" in output
     assert "immich_server: running" not in output
     assert "adguardhome: running" not in output
+
+import pytest
+
+def test_main_docker_error(monkeypatch, capsys):
+    def raise_docker_error():
+       raise main_module.docker.errors.DockerException("Docker is not running")
+    
+    monkeypatch.setattr(main_module.docker, "from_env", raise_docker_error)
+    monkeypatch.setattr("sys.argv", ["homelab-status"])
+
+    with pytest.raises(SystemExit) as excinfo:
+        main_module.main()
+    
+    assert excinfo.value.code == 1
+
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "Unable to connect to Docker" in captured.err

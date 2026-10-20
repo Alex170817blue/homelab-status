@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 
 import docker
 
@@ -26,10 +27,13 @@ def main():
 
     args = parser.parse_args()
 
-    client = docker.from_env()
-    containers = get_containers_status(client)
-    system_status = get_system_status(containers)
-    
+    try:
+        client = docker.from_env()
+        containers = get_containers_status(client)
+        system_status = get_system_status(containers)
+    except docker.errors.DockerException:
+        print("Error: Unable to connect to Docker. Is the Docker daemon running?", file=sys.stderr)
+        sys.exit(1)
    
     if args.only_stopped:
         containers = [c for c in containers if c.status != "running"]
