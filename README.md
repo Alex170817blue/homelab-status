@@ -45,7 +45,7 @@ The application connects to the local Docker daemon and reports the status of al
 It currently supports:
 
 * displaying the total number of containers, running containers, and stopped containers
-* listing container names and statuses
+* listing container names, statuses and health
 * filtering the output to show only stopped containers
 * outputting machine-readable JSON
 * handling Docker connection errors with a clear error message
@@ -59,12 +59,12 @@ Containers: 6
 Running:    5
 Stopped:    1
 
-adguardhome: running
-immich_server: running
-immich_postgres: running
-immich_machine_learning: running
-immich_redis: running
-busy_heisenberg: exited
+adguardhome: running (health: not-configured)
+immich_server: running (health: healthy)
+immich_postgres: running (health: healthy)
+immich_machine_learning: running (health: healthy)
+immich_redis: running (health: healthy)
+busy_heisenberg: exited (health: not-configured)
 ```
 
 The names and statuses above are illustrative examples.
@@ -215,7 +215,7 @@ The project will evolve gradually.
 * [x] Add automated tests
 * [x] Add GitHub Actions CI
 * [x] Improve documentation
-* [ ] Explore Docker health status
+* [x] Explore Docker health status
 * [ ] Add system-level information
 * [ ] Eventually contribute some of the experience gained here to an existing open-source project
 

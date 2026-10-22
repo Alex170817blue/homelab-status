@@ -5,6 +5,7 @@ from dataclasses import dataclass
 class ContainerStatus:
     name: str
     status: str
+    health: str
 
 
 @dataclass
@@ -21,6 +22,7 @@ def get_containers_status(client):
         ContainerStatus(
             name=container.name,
             status=container.status,
+            health=container.attrs.get("State", {}).get("Health", {}).get("Status", "not-configured")
         )
         for container in containers
     ]

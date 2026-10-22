@@ -49,6 +49,7 @@ def main():
                 {
                     "name": container.name,
                     "status": container.status,
+                    "health": container.health,
                 }
 
                 for container in containers
@@ -65,8 +66,8 @@ def main():
     print()
 
     for container in containers:
-        print(f"{container.name}: {container.status}")
-
+        print(f"{container.name}: {container.status}",
+              f"(health: {container.health})")
 
 if __name__ == "__main__":
     main()
